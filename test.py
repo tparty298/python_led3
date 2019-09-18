@@ -13,7 +13,7 @@ LED_BRIGHTNESS = 100     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-FPS = 60
+FPS = 30
 PRODUCTION_MIN = 20
 loopCount=0
 loop_start_time=0
