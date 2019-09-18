@@ -4,18 +4,16 @@ import argparse
 import numpy as np
 import signal
 
-LED_COUNT_UP      = 549      # Number of LED pixels.
-LED_COUNT_DOWN      = 337      # Number of LED pixels.
-LED_PIN_UP        = 13      # GPIO pin connected to the pixels (18 uses PWM!).
-LED_PIN_DOWN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
+LED_COUNT      = 886      # Number of LED pixels.
+LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 100    # Set to 0 for darkest and 255 for brightest
+LED_BRIGHTNESS = 100     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-FPS = 30
+FPS = 60
 PRODUCTION_MIN = 20
 loopCount=0
 loop_start_time=0
@@ -32,15 +30,11 @@ def scheduler(arg1,arg2):
 def Light():
    global loopCount
    loop_start_time=time.time()
-   start_index=loopCount*(LED_COUNT_UP+LED_COUNT_DOWN+1)
-   for j in range(LED_COUNT_UP):
-      strip_up.setPixelColor(j,Color(int(data[start_index+j,1]),int(data[start_index+j,0]),int(data[start_index+j,2])))
+   start_index=loopCount*(LED_COUNT+1)
+   for j in range(LED_COUNT):
+      strip.setPixelColor(j,Color(int(data[start_index+j,1]),int(data[start_index+j,0]),int(data[start_index+j,2])))
       #print(data[j,0])
-   strip_up.show()
-   for j in range(LED_COUNT_DOWN):
-      strip_down.setPixelColor(j,Color(int(data[LED_COUNT_UP+start_index+j,1]),int(data[LED_COUNT_UP+start_index+j,0]),int(data[LED_COUNT_UP+start_index+j,2])))
-      #print(data[j,0])
-   strip_down.show()
+   strip.show()
    loopCount=loopCount+1
    #print("loop time:"+str(time.time()-loop_start_time))
 
@@ -48,10 +42,8 @@ def Light():
 print("hello")
 
 print("start program")
-strip_up = Adafruit_NeoPixel(LED_COUNT_UP, LED_PIN_UP, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-strip_down = Adafruit_NeoPixel(LED_COUNT_DOWN, LED_PIN_DOWN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-strip_up.begin()
-strip_down.begin()
+strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+strip.begin()
 print("file read start")
 data = np.genfromtxt("output.txt",delimiter=",", skip_header=0,dtype='int')
 print("file read end")
